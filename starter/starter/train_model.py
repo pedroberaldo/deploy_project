@@ -11,7 +11,7 @@ import pandas as pd
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
 
-def train_model():
+def go():
     print("================================================")
     logging.info("Loading data!")
     data = pd.read_csv('../cleaned_census.csv')
