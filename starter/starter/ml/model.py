@@ -4,7 +4,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from starter.ml.data import process_data
 
-import numpy as np
+import pickle
 import xgboost as xgb
 from sklearn.model_selection import GridSearchCV
 
