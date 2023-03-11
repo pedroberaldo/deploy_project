@@ -1,52 +1,14 @@
 # # Put the code for your API here.
-# import pickle
-# from pydantic import BaseModel
-
-# import numpy as np
-# import pandas as pd
-# from fastapi import FastAPI, HTTPException
-
-# from starter.ml.model import inference
-# from starter.ml.data import process_data
-
-# app = FastAPI()
-
-
-
-# @app.get('/')
-# def index() -> str:
-#     return "Welcome to this application"
-
-
-# @app.post('/inference')
-# def salary_inference(education : str) -> str:
-#     cat_features = [
-#         "workclass",
-#         "education",
-#         "marital-status",
-#         "occupation",
-#         "relationship",
-#         "race",
-#         "sex",
-#         "native-country",
-#     ]
-#     model = pickle.load(open('starter/models/rf_model.pkl', 'rb'))
-#     education_array = np.array(education)
-#     sample, y,_,_ = process_data(pd.DataFrame(education_array).T, categorical_features=cat_features, label='salary')
-#     inference(model, sample)
-#     return education
-
-import uvicorn
-import pandas as pd
 import pickle
-from fastapi import FastAPI, TestClient
 from pydantic import BaseModel
 
-# Load the trained model
-with open("starter/models/rf_model.pkl", 'rb') as file:
-    model = pickle.load(file)
+import numpy as np
+import pandas as pd
+from fastapi import FastAPI, HTTPException
 
-# Define the FastAPI app
+from starter.ml.model import inference
+from starter.ml.data import process_data
+
 app = FastAPI()
 
 # Define the Pydantic model for the input data
@@ -64,6 +26,30 @@ class InputData(BaseModel):
     capital_loss: int
     hours_per_week: int
     native_country: str
+
+@app.get('/')
+def index() -> str:
+    return "Welcome to this application"
+
+
+@app.post('/inference')
+def salary_inference(X : InputData) -> str:
+    preds = inference(X)
+    return preds
+
+import uvicorn
+import pandas as pd
+import pickle
+from fastapi import FastAPI, TestClient
+from pydantic import BaseModel
+
+# Load the trained model
+
+
+# Define the FastAPI app
+app = FastAPI()
+
+
 
 # Define the root endpoint
 @app.get("/")

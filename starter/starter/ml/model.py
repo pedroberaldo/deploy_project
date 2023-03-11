@@ -2,6 +2,7 @@ from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
+from starter.ml.data import process_data
 
 import numpy as np
 import xgboost as xgb
@@ -56,6 +57,17 @@ def train_model(X_train, y_train):
     return rf
 
 
+def get_training_inference_pipeline():
+    with open("starter/models/rf_model.pkl", 'rb') as file:
+        model = pickle.load(file)
+    pipe = Pipeline(
+            steps=[
+                ("preprocessor", process_data),
+                ("classifier", model)
+            ]
+        )
+    return pipe
+
 def compute_model_metrics(y, preds):
     """
     Validates the trained machine learning model using precision, recall, and F1.
@@ -77,7 +89,7 @@ def compute_model_metrics(y, preds):
     recall = recall_score(y, preds, zero_division=1)
     return precision, recall, fbeta
 
-def inference(model, X): ##### CREATE A INFERECE PIPELINE #####
+def inference(X): ##### CREATE A INFERECE PIPELINE #####
     """ Run model inferences and return the predictions.
 
     Inputs
@@ -91,9 +103,9 @@ def inference(model, X): ##### CREATE A INFERECE PIPELINE #####
     preds : np.array
         Predictions from the model.
     """
-    if isinstance(X, np.ndarray):
-        preds = pipeline.predict(X) 
-        return preds
+    pipeline = get_training_inference_pipeline()
+    preds = pipeline.predict(X) 
+    return preds
     
 def xgboost(X_train, X_test, y_train, y_test):
     params = {
