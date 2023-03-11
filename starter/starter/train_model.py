@@ -36,7 +36,8 @@ def go():
     X_test, y_test, encoder, lb = process_data(
         test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
     )
-
+    with open('encoder.pkl', 'wb') as f:
+        pickle.dump(encoder)
     logging.info("Training and hyperparameter tunning")
     model = train_model(X_train, y_train)
     pickle.dump(model, open("models/rf_model.pkl", 'wb'))

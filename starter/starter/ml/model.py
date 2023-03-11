@@ -1,13 +1,13 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.pipeline import Pipeline
 
 import numpy as np
 import xgboost as xgb
 from sklearn.model_selection import GridSearchCV
 
 import logging
-from ml.data import process_data
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
@@ -77,7 +77,7 @@ def compute_model_metrics(y, preds):
     recall = recall_score(y, preds, zero_division=1)
     return precision, recall, fbeta
 
-def inference(model, X):
+def inference(model, X): ##### CREATE A INFERECE PIPELINE #####
     """ Run model inferences and return the predictions.
 
     Inputs
@@ -91,9 +91,10 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    preds = model.predict(X) 
-    return preds
-
+    if isinstance(X, np.ndarray):
+        preds = pipeline.predict(X) 
+        return preds
+    
 def xgboost(X_train, X_test, y_train, y_test):
     params = {
         'max_depth': [3, 5, 7],
