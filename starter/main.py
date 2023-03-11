@@ -2,9 +2,7 @@
 import pickle
 from pydantic import BaseModel
 
-import numpy as np
-import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 
 from starter.ml.model import inference
 
