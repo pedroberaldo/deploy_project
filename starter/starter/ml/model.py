@@ -58,7 +58,7 @@ def train_model(X_train, y_train):
 
 
 def get_training_inference_pipeline():
-    with open("starter/models/rf_model.pkl", 'rb') as file:
+    with open("starter/starter/models/rf_model.pkl", 'rb') as file:
         model = pickle.load(file)
     pipe = Pipeline(
             steps=[
