@@ -4,6 +4,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from starter.ml.data import process_data
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import FunctionTransformer
 
 import pickle
 # import xgboost as xgb
@@ -58,7 +59,7 @@ def train_model(X_train, y_train):
     return rf
 
 
-def get_training_inference_pipeline():
+def get_training_inference_pipeline(X):
     with open("starter/starter/models/rf_model.pkl", 'rb') as file:
         model = pickle.load(file)
     cat_features = [
@@ -71,9 +72,10 @@ def get_training_inference_pipeline():
         "sex",
         "native-country",
     ]
+    cat_preprocess = FunctionTransformer(process_data, kw_args={"X": X, "categorical_features" : cat_features,})
     preprocessor = ColumnTransformer(
         transformers=[
-            ("cat", process_data, cat_features)
+            ("cat", cat_preprocess, cat_features)
         ],
         remainder="drop",  # This drops the columns that we do not transform
     )
