@@ -79,8 +79,8 @@ def test_compute_model_metrics():
 def test_inference(get_process_data_test):
     # Test that inference returns expected results for a given input
     # model = train_model(X_train, y_train)
-    model = pickle.load(open("starter/starter/models/rf_model.pkl",'rb'))
-    preds = inference(model, get_process_data_test['X_test'])
+
+    preds = inference(get_process_data_test['X_test'])
     assert len(preds) == len(get_process_data_test['y_test'])
 
 def test_process_data_training_mode(get_data, get_process_data_train):
