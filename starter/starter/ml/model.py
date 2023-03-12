@@ -3,6 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from starter.ml.data import process_data
+from sklearn.compose import ColumnTransformer
 
 import pickle
 # import xgboost as xgb
@@ -60,6 +61,22 @@ def train_model(X_train, y_train):
 def get_training_inference_pipeline():
     with open("starter/starter/models/rf_model.pkl", 'rb') as file:
         model = pickle.load(file)
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("cat", process_data, cat_features)
+        ],
+        remainder="drop",  # This drops the columns that we do not transform
+    )
     pipe = Pipeline(
             steps=[
                 ("preprocessor", process_data),
