@@ -110,7 +110,7 @@ def compute_model_metrics(y, preds):
     recall = recall_score(y, preds, zero_division=1)
     return precision, recall, fbeta
 
-def inference(X): ##### CREATE A INFERECE PIPELINE #####
+def inference(model, X): ##### CREATE A INFERECE PIPELINE #####
     """ Run model inferences and return the predictions.
 
     Inputs
@@ -124,8 +124,7 @@ def inference(X): ##### CREATE A INFERECE PIPELINE #####
     preds : np.array
         Predictions from the model.
     """
-    pipeline = get_training_inference_pipeline()
-    preds = pipeline.predict(X) 
+    preds = model.predict(X) 
     return preds
     
 # def xgboost(X_train, X_test, y_train, y_test):
