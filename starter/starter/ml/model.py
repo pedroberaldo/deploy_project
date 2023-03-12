@@ -5,7 +5,7 @@ from sklearn.pipeline import Pipeline
 from starter.ml.data import process_data
 
 import pickle
-import xgboost as xgb
+# import xgboost as xgb
 from sklearn.model_selection import GridSearchCV
 
 import logging
@@ -107,41 +107,41 @@ def inference(X): ##### CREATE A INFERECE PIPELINE #####
     preds = pipeline.predict(X) 
     return preds
     
-def xgboost(X_train, X_test, y_train, y_test):
-    params = {
-        'max_depth': [3, 5, 7],
-        'learning_rate': [0.1, 0.01],
-        'n_estimators': [50, 100, 200]
-    }
+# def xgboost(X_train, X_test, y_train, y_test):
+#     params = {
+#         'max_depth': [3, 5, 7],
+#         'learning_rate': [0.1, 0.01],
+#         'n_estimators': [50, 100, 200]
+#     }
 
-    # Define a function for training an XGBoost model with a given set of hyperparameters
-    def train_xgboost(params, X_train, y_train):
-        model = xgb.XGBClassifier(**params)
-        model.fit(X_train, y_train)
-        return model
+#     # Define a function for training an XGBoost model with a given set of hyperparameters
+#     def train_xgboost(params, X_train, y_train):
+#         model = xgb.XGBClassifier(**params)
+#         model.fit(X_train, y_train)
+#         return model
 
-    # Perform a grid search over the hyperparameters
-    clf = GridSearchCV(xgb.XGBClassifier(), params, cv=5, scoring='accuracy')
-    clf.fit(X_train, y_train)
+#     # Perform a grid search over the hyperparameters
+#     clf = GridSearchCV(xgb.XGBClassifier(), params, cv=5, scoring='accuracy')
+#     clf.fit(X_train, y_train)
 
-    # Print the best hyperparameters and corresponding accuracy
-    print("Best hyperparameters: ", clf.best_params_)
-    print("Accuracy: ", clf.best_score_)
+#     # Print the best hyperparameters and corresponding accuracy
+#     print("Best hyperparameters: ", clf.best_params_)
+#     print("Accuracy: ", clf.best_score_)
 
-    # Train a final model with the best hyperparameters
-    params = clf.best_params_
-    model = train_xgboost(params, X_train, y_train)
+#     # Train a final model with the best hyperparameters
+#     params = clf.best_params_
+#     model = train_xgboost(params, X_train, y_train)
 
-    # Predict the validation set and compute accuracy
-    preds = model.predict(X_test)
-    metrics = compute_model_metrics(y_test, preds)
-    with open('slice_output.txt', 'w') as f:
-        # f.write(f"{category}: {value}\n")
-        f.write(f"Precision: {metrics[0]:.3f}\n")
-        f.write(f"Recall: {metrics[1]:.3f}\n")
-        f.write(f"F1-score: {metrics[2]:.3f}\n\n")
+#     # Predict the validation set and compute accuracy
+#     preds = model.predict(X_test)
+#     metrics = compute_model_metrics(y_test, preds)
+#     with open('slice_output.txt', 'w') as f:
+#         # f.write(f"{category}: {value}\n")
+#         f.write(f"Precision: {metrics[0]:.3f}\n")
+#         f.write(f"Recall: {metrics[1]:.3f}\n")
+#         f.write(f"F1-score: {metrics[2]:.3f}\n\n")
 
 
-    print(f"Precision: {metrics[0]}")
-    print(f"Recall: {metrics[1]}")
-    print(f"F1-score: {metrics[2]}")
+#     print(f"Precision: {metrics[0]}")
+#     print(f"Recall: {metrics[1]}")
+#     print(f"F1-score: {metrics[2]}")
