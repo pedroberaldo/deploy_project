@@ -31,7 +31,7 @@ cat_features = [
 
 @pytest.fixture(scope="session")
 def get_data():
-    data = pd.read_csv('../../cleaned_census.csv')
+    data = pd.read_csv('cleaned_census.csv')
     train, test = train_test_split(data, test_size=0.20)
     return {
         'train': train, 
@@ -63,7 +63,7 @@ def get_process_data_test(get_data, get_process_data_train):
 def test_train_model():
     # Test that the train_model function returns a trained model
     # model = train_model(X_train, y_train)
-    model = pickle.load(open("../models/rf_model.pkl",'rb'))
+    model = pickle.load(open("starter/starter/models/rf_model.pkl",'rb'))
     assert model is not None
 
 def test_compute_model_metrics():
@@ -79,7 +79,7 @@ def test_compute_model_metrics():
 def test_inference(get_process_data_test):
     # Test that inference returns expected results for a given input
     # model = train_model(X_train, y_train)
-    model = pickle.load(open("../models/rf_model.pkl",'rb'))
+    model = pickle.load(open("starter/starter/models/rf_model.pkl",'rb'))
     preds = inference(model, get_process_data_test['X_test'])
     assert len(preds) == len(get_process_data_test['y_test'])
 
