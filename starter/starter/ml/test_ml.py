@@ -31,7 +31,7 @@ cat_features = [
 
 @pytest.fixture(scope="session")
 def get_data():
-    data = pd.read_csv('cleaned_census.csv')
+    data = pd.read_csv('starter/cleaned_census.csv')
     train, test = train_test_split(data, test_size=0.20)
     return {
         'train': train, 
