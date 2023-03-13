@@ -12,7 +12,7 @@ The model is intended to make binary predictions on a given dataset. The input d
 The model was trained on a labeled dataset consisting of numerical features and binary labels.
 
 ## Evaluation Data
-The model's performance was evaluated on a hold-out dataset with the same feature distribution as the training data.
+The model's performance was evaluated using 30% of our dataset
 
 ## Metrics
 The following metrics were used to evaluate the model's performance on the evaluation data:
