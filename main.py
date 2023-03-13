@@ -2,7 +2,7 @@
 import pickle
 from pydantic import BaseModel
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 
 from starter.starter.ml.model import inference
 from starter.starter.ml.data import process_data
@@ -38,7 +38,7 @@ class InputData(BaseModel):
                 "sex": "Male",
                 "native_country": "Cuba",
                 "age": 29,
-                "fnlwgt": 77516,
+                "fnlwgt": 77516, 
                 "education_num": 13,
                 "capital_gain": 2174,
                 "capital_loss": 0,
@@ -47,12 +47,13 @@ class InputData(BaseModel):
         }
 
 @app.get('/')
-def index() -> str:
-    return "FastAPI for Udacity course :)"
-
-
+def index() -> Response:
+    return Response(
+            status_code=status.HTTP_200_OK,
+            content="FastAPI prediction is up and running!",
+        )
 @app.post('/inference')
-def salary_inference(input_json : InputData) -> str:
+def salary_inference(input_json : InputData) -> Response:
     cat_features = [
         "workclass",
         "education",
@@ -63,16 +64,51 @@ def salary_inference(input_json : InputData) -> str:
         "sex",
         "native_country",
     ]
-    with  open('starter/starter/models/encoder.pkl', 'rb') as file:
+    with open('starter/starter/models/encoder.pkl', 'rb') as file:
         encoder = pickle.load(file)
-    with  open('starter/starter/models/lb.pkl', 'rb') as file:
+    with open('starter/starter/models/lb.pkl', 'rb') as file:
         lb = pickle.load(file)
-    with  open('starter/starter/models/rf_model.pkl', 'rb') as file:
+    with open('starter/starter/models/rf_model.pkl', 'rb') as file:
         model = pickle.load(file)
+
     X = pd.DataFrame(dict(input_json), index=[0])
     X,_,_,_ = process_data(X, categorical_features=cat_features, encoder=encoder,lb=lb, training=False)
     preds = inference(model, X)
-    return preds
+    result = lb.inverse_transform(preds[0])[0]
+    response = Response(
+            status_code=status.HTTP_200_OK,
+            content="Predicted income: " + result,
+        )
+    return response
+
+
+# @app.post('/inference')
+# def salary_inference(input_json : InputData) -> str:
+#     cat_features = [
+#         "workclass",
+#         "education",
+#         "marital_status",
+#         "occupation",
+#         "relationship",
+#         "race",
+#         "sex",
+#         "native_country",
+#     ]
+#     with  open('starter/starter/models/encoder.pkl', 'rb') as file:
+#         encoder = pickle.load(file)
+#     with  open('starter/starter/models/lb.pkl', 'rb') as file:
+#         lb = pickle.load(file)
+#     with  open('starter/starter/models/rf_model.pkl', 'rb') as file:
+#         model = pickle.load(file)
+#     try:
+#     # your code that raises a ValidationError
+#         X = pd.DataFrame(dict(input_json), index=[0])
+#         X,_,_,_ = process_data(X, categorical_features=cat_features, encoder=encoder,lb=lb, training=False)
+#         preds = inference(model, X)
+#         return preds
+#     except ValidationError as e:
+#         print(e)
+    
 # import uvicorn
 # import pandas as pd
 # import pickle
