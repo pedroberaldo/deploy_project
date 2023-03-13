@@ -145,7 +145,7 @@
 import pickle
 from pydantic import BaseModel
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 
 from starter.starter.ml.model import inference
 from starter.starter.ml.data import process_data
@@ -212,7 +212,16 @@ def salary_inference(input_json : InputData) -> str:
         lb = pickle.load(file)
     with  open('starter/starter/models/rf_model.pkl', 'rb') as file:
         model = pickle.load(file)
+    # X = pd.DataFrame(dict(input_json), index=[0])
+    # X,_,_,_ = process_data(X, categorical_features=cat_features, encoder=encoder,lb=lb, training=False)
+    # preds = inference(model, X)
+    # return preds
     X = pd.DataFrame(dict(input_json), index=[0])
     X,_,_,_ = process_data(X, categorical_features=cat_features, encoder=encoder,lb=lb, training=False)
     preds = inference(model, X)
-    return preds
+    result = lb.inverse_transform(preds[0])[0]
+    response = Response(
+            status_code=status.HTTP_200_OK,
+            content="Predicted income: " + result,
+        )
+    return response
