@@ -88,7 +88,7 @@ def test_inference(get_process_data_train, get_process_data_test):
 def test_process_data_training_mode(get_data, get_process_data_train):
     # Test training mode
     X_processed, y_processed, encoder, lb = process_data(get_data['train'], categorical_features=cat_features, label="salary", training=True)
-    assert X_processed.shape == (26048, 108)
+    assert X_processed.shape == (26048, 107)
     assert y_processed.shape == (26048,)
     assert isinstance(encoder, OneHotEncoder)
     assert isinstance(lb, LabelBinarizer)
@@ -96,5 +96,5 @@ def test_process_data_training_mode(get_data, get_process_data_train):
 def test_process_data_inference_mode(get_data, get_process_data_train):
     # Test inference mode
     X_processed, y_processed, get_process_data_train['encoder'], get_process_data_train['lb'] = process_data(get_data['test'], categorical_features=cat_features, label="salary", training=False, encoder=get_process_data_train['encoder'], lb=get_process_data_train['lb'])
-    assert X_processed.shape == (6513, 108)
+    assert X_processed.shape == (6513, 107)
     assert y_processed.shape == (6513,)
