@@ -57,35 +57,35 @@ def train_model(X_train, y_train):
     return rf
 
 
-def get_training_inference_pipeline():
-    with open("starter/starter/models/rf_model.pkl", 'rb') as file:
-        model = pickle.load(file)
-    cat_features = [
-        "workclass",
-        "education",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "native-country",
-    ]
+# def get_training_inference_pipeline():
+#     with open("starter/starter/models/rf_model.pkl", 'rb') as file:
+#         model = pickle.load(file)
+#     cat_features = [
+#         "workclass",
+#         "education",
+#         "marital-status",
+#         "occupation",
+#         "relationship",
+#         "race",
+#         "sex",
+#         "native-country",
+#     ]
 
-    data_transformer = FunctionTransformer(process_data, kw_args={'categorical_features': cat_features})
+#     data_transformer = FunctionTransformer(process_data, kw_args={'categorical_features': cat_features})
 
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("cat", data_transformer, cat_features)
-        ],
-        remainder="drop",  # This drops the columns that we do not transform
-    )
-    pipe = Pipeline(
-            steps=[
-                ("preprocessor", preprocessor),
-                ("classifier", model)
-            ]
-        )
-    return pipe
+#     preprocessor = ColumnTransformer(
+#         transformers=[
+#             ("cat", data_transformer, cat_features)
+#         ],
+#         remainder="drop",  # This drops the columns that we do not transform
+#     )
+#     pipe = Pipeline(
+#             steps=[
+#                 ("preprocessor", preprocessor),
+#                 ("classifier", model)
+#             ]
+#         )
+#     return pipe
 
 def compute_model_metrics(y, preds):
     """
