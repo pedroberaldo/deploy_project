@@ -2,10 +2,8 @@ from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
-from starter.ml.data import process_data
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import FunctionTransformer
-
 import pickle
 # import xgboost as xgb
 from sklearn.model_selection import GridSearchCV
@@ -126,6 +124,9 @@ def inference(model, X): ##### CREATE A INFERECE PIPELINE #####
     """
     preds = model.predict(X) 
     return preds
+
+if __name__ == "__main__":
+    pass
     
 # def xgboost(X_train, X_test, y_train, y_test):
 #     params = {

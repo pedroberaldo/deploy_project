@@ -36,8 +36,11 @@ def go():
     X_test, y_test, encoder, lb = process_data(
         test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
     )
-    with open('encoder.pkl', 'wb') as f:
-        pickle.dump(encoder)
+    with open('models/encoder.pkl', 'wb') as f:
+        pickle.dump(encoder,f)
+
+    with open('models/lb.pkl', 'wb') as f:
+        pickle.dump(lb, f)
     logging.info("Training and hyperparameter tunning")
     model = train_model(X_train, y_train)
     pickle.dump(model, open("models/rf_model.pkl", 'wb'))
@@ -72,3 +75,5 @@ def go():
                 f.write(f"Recall: {slice_metrics['recall']:.3f}\n")
                 f.write(f"F1-score: {slice_metrics['f1-score']:.3f}\n\n")
                 f.write("\n")
+
+go()

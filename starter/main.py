@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 
 from starter.ml.model import inference
+from starter.ml.data import process_data
+import pandas as pd
 
 app = FastAPI()
 
@@ -24,13 +26,49 @@ class InputData(BaseModel):
     hours_per_week: int
     native_country: str
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "workclass": "state_gov",
+                "education": "11th",
+                "marital_status": "never_married",
+                "occupation": "adm_clerical",
+                "relationship": "not_in_family",
+                "race": "white",
+                "sex": "females",
+                "native_country": "united_states",
+                "age": 29,
+                "fnlwgt": 77516,
+                "education_num": 13,
+                "capital_gain": 2174,
+                "capital_loss": 0,
+                "hours_per_week": 40
+            }
+        }
+
 @app.get('/')
 def index() -> str:
-    return "Welcome to this application"
+    return "FastAPI for Udacity course :)"
 
 
 @app.post('/inference')
-def salary_inference(X : InputData) -> str:
+def salary_inference(input_json : InputData) -> str:
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+    with  open('starter/models/encoder.pkl', 'rb') as file:
+        encoder = pickle.load(file)
+    with  open('starter/models/lb.pkl', 'rb') as file:
+        lb = pickle.load(file)
+    X = pd.DataFrame(dict(input_json), index=[0])
+    X,_,_,_ = process_data(X, categorical_features=cat_features, encoder=encoder,lb=lb)
     preds = inference(X)
     return preds
 
