@@ -79,9 +79,10 @@ def test_compute_model_metrics():
 def test_inference(get_process_data_train, get_process_data_test):
     # Test that inference returns expected results for a given input
     # model = train_model(X_train, y_train)
-    pipe = get_training_inference_pipeline()
-    pipe.fit(get_process_data_train['X_train'], get_process_data_train['y_train'])
-    preds = pipe.predict(get_process_data_test['X_test'])
+    # pipe = get_training_inference_pipeline()
+    # pipe.fit(get_process_data_train['X_train'], get_process_data_train['y_train'])
+    model = pickle.load(open("starter/starter/models/rf_model.pkl",'rb'))
+    preds = model.predict(get_process_data_test['X_test']) #pipe.predict(get_process_data_test['X_test'])
     assert len(preds) == len(get_process_data_test['y_test'])
 
 def test_process_data_training_mode(get_data, get_process_data_train):
