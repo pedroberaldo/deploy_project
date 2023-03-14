@@ -67,10 +67,6 @@ from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import pickle
-# Load the trained model
-
-# os.chdir("ml/")
-# from model import train_model, compute_model_metrics, inference
 import os
 import pickle
 import sys
