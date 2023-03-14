@@ -80,8 +80,8 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, parent_dir)
 
 # Add parent directory to Python path
-from ml.model import *
-from ml.data import *
+from starter.starter.ml.model import *
+from starter.starter.ml.data import *
 
 cat_features = [
         "workclass",
