@@ -3,10 +3,7 @@ import pytest
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 import pandas as pd
-import pickle
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
-from main import app
+import pickl
 # Load the trained model
 
 # os.chdir("ml/")
@@ -103,63 +100,3 @@ def test_process_data_inference_mode(get_data, get_process_data_train):
     X_processed, y_processed, get_process_data_train['encoder'], get_process_data_train['lb'] = process_data(get_data['test'], categorical_features=cat_features, label="salary", training=False, encoder=get_process_data_train['encoder'], lb=get_process_data_train['lb'])
     assert X_processed.shape == (6513, 108)
     assert y_processed.shape == (6513,)
-
-
-with open("starter/starter/models/rf_model.pkl", 'rb') as file:
-    model = pickle.load(file)
-
-# Define the FastAPI app
-# app = FastAPI()
-
-# Define the unit tests
-def test_root():
-    with TestClient(app) as client:
-        response = client.get("/")
-        assert response.status_code == 200
-        assert response.content == b'FastAPI for Udacity course :)'
-
-def test_predict_1():
-    with TestClient(app) as client:
-        input_data = {
-                "workclass": "state_gov",
-                "education": "11th",
-                "marital_status": "Never_married",
-                "occupation": "adm_clerical",
-                "relationship": "not_in_family",
-                "race": "white",
-                "sex": "Male",
-                "native_country": "Cuba",
-                "age": 29,
-                "fnlwgt": 77516,
-                "education_num": 13,
-                "capital_gain": 2174,
-                "capital_loss": 0,
-                "hours_per_week": 40
-            }
-        response = client.post("/inference", json=input_data)
-        assert response.status_code == 200
-        assert response.content == b'Predicted income: <=50K'
-
-def test_predict_2():
-    with TestClient(app) as client:
-        input_data = {
-                "workclass": "Self-emp-not-inc",
-                "education": "HS-grad",
-                "marital_status": "Never_married",
-                "occupation": "Exec-managerial",
-                "relationship": "Husband",
-                "race": "white",
-                "sex": "Male",
-                "native_country": "United-States",
-                "age": 52,
-                "fnlwgt": 209642,
-                "education_num": 13,
-                "capital_gain": 2174,
-                "capital_loss": 0,
-                "hours_per_week": 40
-            }
-        response = client.post("/inference", json=input_data)
-        assert response.status_code == 200
-        assert response.content == b'Predicted income: >50K'
-
-
