@@ -190,8 +190,11 @@ class InputData(BaseModel):
         }
 
 @app.get('/')
-def index() -> str:
-    return "FastAPI for Udacity course :)"
+def index() -> Response:
+    return Response(
+            status_code=status.HTTP_200_OK,
+            content="FastAPI for Udacity course :)"
+        )
 
 
 @app.post('/inference')
